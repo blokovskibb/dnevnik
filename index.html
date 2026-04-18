@@ -21,6 +21,62 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
   body {
+    <div id="pin-overlay" style="display:flex;position:fixed;inset:0;background:#1A1A2E;z-index:99999;flex-direction:column;align-items:center;justify-content:center;gap:20px;font-family:sans-serif;">
+  <div style="color:#C9A96E;font-size:13px;letter-spacing:3px;text-transform:uppercase;">Unesi PIN</div>
+  <div id="pin-dots" style="display:flex;gap:12px;margin:8px 0;">
+    <div id="d1" style="width:14px;height:14px;border-radius:50%;border:2px solid #C9A96E;"></div>
+    <div id="d2" style="width:14px;height:14px;border-radius:50%;border:2px solid #C9A96E;"></div>
+    <div id="d3" style="width:14px;height:14px;border-radius:50%;border:2px solid #C9A96E;"></div>
+    <div id="d4" style="width:14px;height:14px;border-radius:50%;border:2px solid #C9A96E;"></div>
+  </div>
+  <div id="pin-error" style="color:#FF5C5C;font-size:12px;height:16px;"></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:220px;">
+    <button onclick="pinPress('1')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">1</button>
+    <button onclick="pinPress('2')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">2</button>
+    <button onclick="pinPress('3')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">3</button>
+    <button onclick="pinPress('4')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">4</button>
+    <button onclick="pinPress('5')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">5</button>
+    <button onclick="pinPress('6')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">6</button>
+    <button onclick="pinPress('7')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">7</button>
+    <button onclick="pinPress('8')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">8</button>
+    <button onclick="pinPress('9')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">9</button>
+    <button onclick="pinDel()" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#FF5C5C;font-size:18px;border-radius:4px;cursor:pointer;">⌫</button>
+    <button onclick="pinPress('0')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">0</button>
+    <div></div>
+  </div>
+</div>
+<script>
+var _pin = '';
+var _correct = '1312';
+var _sk = 'pin_ok_' + location.pathname;
+if(sessionStorage.getItem(_sk)==='1'){
+  document.getElementById('pin-overlay').style.display='none';
+}
+function pinPress(d){
+  if(_pin.length>=4)return;
+  _pin+=d;
+  document.getElementById('d'+_pin.length).style.background='#C9A96E';
+  if(_pin.length===4){
+    if(_pin===_correct){
+      sessionStorage.setItem(_sk,'1');
+      document.getElementById('pin-overlay').style.display='none';
+    } else {
+      document.getElementById('pin-error').textContent='Pogresan PIN';
+      setTimeout(function(){
+        _pin='';
+        for(var i=1;i<=4;i++)document.getElementById('d'+i).style.background='transparent';
+        document.getElementById('pin-error').textContent='';
+      },800);
+    }
+  }
+}
+function pinDel(){
+  if(!_pin.length)return;
+  document.getElementById('d'+_pin.length).style.background='transparent';
+  _pin=_pin.slice(0,-1);
+}
+</script>
+
     font-family: 'Crimson Pro', Georgia, serif;
     background: var(--parchment);
     color: var(--ink);
