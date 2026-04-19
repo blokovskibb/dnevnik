@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Moj Dnevnik</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1C1410;
+    --parchment: #F5EDD8;
+    --warm:      #EAD9B5;
+    --border:    #C9A96E;
+    --gold:      #A07830;
+    --deep:      #3D2B1A;
+    --red:       #8B1A1A;
+    --fade:      #7A6A55;
+    --white:     #FDFAF4;
+  }
+
+- { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+font-family: ‘Crimson Pro’, Georgia, serif;
+background: var(–parchment);
+color: var(–ink);
+min-height: 100vh;
+font-size: 17px;
+background-image:
+radial-gradient(ellipse at 20% 0%, rgba(160,120,48,0.08) 0%, transparent 60%),
+radial-gradient(ellipse at 80% 100%, rgba(139,26,26,0.05) 0%, transparent 50%);
+}
+
+/* ── HEADER ── */
+header {
+background: var(–deep);
+padding: 18px 20px 14px;
+text-align: center;
+position: sticky;
+top: 0;
+z-index: 100;
+border-bottom: 2px solid var(–gold);
+box-shadow: 0 2px 16px rgba(0,0,0,0.35);
+}
+
+.cross {
+display: inline-block;
+color: var(–gold);
+font-size: 13px;
+letter-spacing: 4px;
+margin-bottom: 4px;
+opacity: 0.85;
+}
+
+header h1 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px;
+font-weight: 600;
+color: var(–warm);
+letter-spacing: 1px;
+}
+
+.date-nav {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 12px 16px 0;
+gap: 8px;
+}
+
+.date-nav button {
+background: rgba(160,120,48,0.18);
+border: 1px solid var(–gold);
+color: var(–warm);
+width: 36px; height: 36px;
+border-radius: 50%;
+font-size: 18px;
+cursor: pointer;
+transition: background 0.2s;
+line-height: 1;
+flex-shrink: 0;
+}
+.date-nav button:active { background: rgba(160,120,48,0.4); }
+
+#current-date-label {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 15px;
+color: var(–border);
+letter-spacing: 0.5px;
+text-align: center;
+flex: 1;
+}
+
+/* ── MAIN CONTENT ── */
+main {
+max-width: 480px;
+margin: 0 auto;
+padding: 18px 16px 100px;
+}
+
+/* ── SECTION CARD ── */
+.card {
+background: var(–white);
+border: 1px solid var(–border);
+border-radius: 4px;
+margin-bottom: 14px;
+overflow: hidden;
+box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.card-header {
+background: var(–deep);
+padding: 10px 14px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.card-header .icon { font-size: 15px; }
+
+.card-header h2 {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 15px;
+font-weight: 600;
+color: var(–warm);
+letter-spacing: 0.5px;
+}
+
+.card-header .hint {
+font-size: 11px;
+color: var(–border);
+margin-left: auto;
+font-style: italic;
+font-family: ‘Crimson Pro’, serif;
+font-weight: 300;
+}
+
+textarea {
+width: 100%;
+border: none;
+outline: none;
+resize: none;
+font-family: ‘Crimson Pro’, serif;
+font-size: 16px;
+line-height: 1.7;
+color: var(–ink);
+background: var(–white);
+padding: 14px 16px;
+min-height: 90px;
+letter-spacing: 0.2px;
+}
+
+textarea::placeholder {
+color: #B8A88A;
+font-style: italic;
+font-size: 15px;
+}
+
+textarea:focus { background: #FEFCF5; }
+
+/* Dream textarea slightly different */
+.dream-ta { min-height: 75px; }
+
+/* ── MOOD SELECTOR ── */
+.mood-row {
+padding: 12px 14px;
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+}
+
+.mood-btn {
+border: 1px solid var(–border);
+background: transparent;
+color: var(–fade);
+font-size: 13px;
+font-family: ‘Crimson Pro’, serif;
+padding: 5px 10px;
+border-radius: 2px;
+cursor: pointer;
+transition: all 0.18s;
+white-space: nowrap;
+}
+
+.mood-btn:active, .mood-btn.selected {
+background: var(–deep);
+color: var(–warm);
+border-color: var(–gold);
+}
+
+/* ── THOUGHT TAG ── */
+.tag-row {
+padding: 6px 14px 14px;
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+}
+
+.tag {
+background: var(–warm);
+border: 1px solid var(–border);
+color: var(–deep);
+font-size: 12px;
+font-family: ‘Crimson Pro’, serif;
+padding: 4px 9px;
+border-radius: 2px;
+cursor: pointer;
+transition: all 0.15s;
+}
+
+.tag.selected {
+background: var(–red);
+color: var(–warm);
+border-color: var(–red);
+}
+
+/* ── ORNAMENTAL DIVIDER ── */
+.ornament {
+text-align: center;
+color: var(–gold);
+font-size: 14px;
+letter-spacing: 6px;
+margin: 4px 0 12px;
+opacity: 0.6;
+}
+
+/* ── SAVE BUTTON ── */
+.save-wrap {
+position: fixed;
+bottom: 0; left: 0; right: 0;
+background: linear-gradient(to top, var(–parchment) 70%, transparent);
+padding: 20px 20px 24px;
+display: flex;
+gap: 10px;
+justify-content: center;
+max-width: 480px;
+margin: 0 auto;
+right: max(0px, calc(50vw - 240px));
+left: max(0px, calc(50vw - 240px));
+}
+
+#btn-save {
+flex: 1;
+background: var(–deep);
+color: var(–warm);
+border: 1.5px solid var(–gold);
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 17px;
+font-weight: 600;
+letter-spacing: 1px;
+padding: 13px 0;
+border-radius: 3px;
+cursor: pointer;
+transition: all 0.2s;
+}
+#btn-save:active { background: var(–red); border-color: var(–red); }
+
+#btn-view {
+background: transparent;
+border: 1.5px solid var(–border);
+color: var(–fade);
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 14px;
+padding: 13px 14px;
+border-radius: 3px;
+cursor: pointer;
+white-space: nowrap;
+}
+#btn-view:active { background: var(–warm); }
+
+/* ── TOAST ── */
+#toast {
+position: fixed;
+top: 90px; left: 50%; transform: translateX(-50%);
+background: var(–deep);
+color: var(–warm);
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 15px;
+padding: 10px 22px;
+border-radius: 3px;
+border: 1px solid var(–gold);
+opacity: 0;
+transition: opacity 0.3s;
+pointer-events: none;
+z-index: 999;
+white-space: nowrap;
+}
+#toast.show { opacity: 1; }
+
+/* ── ARCHIVE VIEW ── */
+#archive {
+display: none;
+position: fixed;
+inset: 0;
+background: var(–parchment);
+z-index: 200;
+overflow-y: auto;
+padding-bottom: 80px;
+}
+
+#archive header {
+position: sticky;
+top: 0;
+}
+
+.archive-close {
+position: absolute;
+right: 16px; top: 50%;
+transform: translateY(-50%);
+background: none;
+border: none;
+color: var(–gold);
+font-size: 22px;
+cursor: pointer;
+}
+
+.archive-list {
+max-width: 480px;
+margin: 0 auto;
+padding: 16px;
+}
+
+.archive-entry {
+background: var(–white);
+border: 1px solid var(–border);
+border-radius: 3px;
+margin-bottom: 12px;
+overflow: hidden;
+}
+
+.entry-date {
+background: var(–deep);
+padding: 8px 14px;
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 14px;
+color: var(–warm);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.entry-mood-badge {
+font-size: 11px;
+color: var(–border);
+font-style: italic;
+}
+
+.entry-body {
+padding: 12px 14px;
+font-size: 15px;
+line-height: 1.6;
+color: var(–ink);
+}
+
+.entry-section {
+margin-bottom: 8px;
+}
+
+.entry-section-label {
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 1px;
+color: var(–fade);
+margin-bottom: 3px;
+font-family: ‘Crimson Pro’, serif;
+}
+
+.entry-section-text {
+font-family: ‘Crimson Pro’, serif;
+font-size: 15px;
+color: var(–ink);
+line-height: 1.6;
+white-space: pre-wrap;
+}
+
+.entry-tags {
+display: flex;
+gap: 5px;
+flex-wrap: wrap;
+margin-top: 6px;
+}
+
+.entry-tag {
+background: var(–warm);
+border: 1px solid var(–border);
+color: var(–deep);
+font-size: 11px;
+padding: 2px 7px;
+border-radius: 2px;
+}
+
+.del-btn {
+background: none;
+border: none;
+color: var(–red);
+font-size: 13px;
+cursor: pointer;
+padding: 4px 8px;
+opacity: 0.6;
+}
+
+.empty-archive {
+text-align: center;
+color: var(–fade);
+font-style: italic;
+font-size: 15px;
+padding: 40px 20px;
+}
+
+.char-count {
+text-align: right;
+padding: 2px 14px 6px;
+font-size: 11px;
+color: #C4A87A;
+font-family: ‘Crimson Pro’, serif;
+}
+
+/* ── Today exists indicator ── */
+.today-saved {
+background: rgba(160,120,48,0.1);
+border: 1px solid var(–gold);
+color: var(–gold);
+font-size: 12px;
+font-family: ‘Crimson Pro’, serif;
+font-style: italic;
+text-align: center;
+padding: 6px;
+border-radius: 2px;
+margin-bottom: 12px;
+}
+
+/* ── CALENDAR BUTTON ── */
+.btn-cal {
+background: rgba(160,120,48,0.18);
+border: 1px solid var(–gold);
+color: var(–gold);
+width: 34px; height: 34px;
+border-radius: 50%;
+font-size: 15px;
+cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+transition: background 0.2s;
+}
+.btn-cal:active { background: rgba(160,120,48,0.4); }
+
+/* ── CALENDAR OVERLAY ── */
+#cal-overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(30,18,10,0.92);
+z-index: 300;
+align-items: flex-start;
+justify-content: center;
+padding-top: 60px;
+}
+#cal-overlay.open { display: flex; }
+
+.cal-sheet {
+background: var(–white);
+border: 1px solid var(–border);
+border-radius: 6px;
+width: calc(100% - 32px);
+max-width: 420px;
+overflow: hidden;
+box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+.cal-header {
+background: var(–deep);
+padding: 14px 16px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 2px solid var(–gold);
+}
+
+.cal-nav-btn {
+background: rgba(160,120,48,0.2);
+border: 1px solid var(–gold);
+color: var(–warm);
+width: 32px; height: 32px;
+border-radius: 50%;
+font-size: 16px;
+cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+}
+.cal-nav-btn:active { background: rgba(160,120,48,0.5); }
+
+.cal-month-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 17px;
+font-weight: 600;
+color: var(–warm);
+letter-spacing: 0.5px;
+text-align: center;
+flex: 1;
+}
+
+.cal-close {
+background: none;
+border: none;
+color: var(–gold);
+font-size: 20px;
+cursor: pointer;
+padding: 0 4px;
+}
+
+.cal-weekdays {
+display: grid;
+grid-template-columns: repeat(7, 1fr);
+background: var(–warm);
+border-bottom: 1px solid var(–border);
+}
+
+.cal-wd {
+text-align: center;
+font-size: 10px;
+letter-spacing: 1px;
+text-transform: uppercase;
+color: var(–fade);
+padding: 7px 0;
+font-family: ‘Crimson Pro’, serif;
+}
+.cal-wd.sunday { color: var(–red); }
+
+.cal-grid {
+display: grid;
+grid-template-columns: repeat(7, 1fr);
+gap: 0;
+padding: 6px;
+background: var(–white);
+}
+
+.cal-day {
+aspect-ratio: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+font-family: ‘Crimson Pro’, serif;
+font-size: 14px;
+color: var(–ink);
+cursor: pointer;
+position: relative;
+transition: all 0.15s;
+margin: 1px;
+}
+.cal-day:active { background: var(–warm); }
+.cal-day.empty { cursor: default; }
+.cal-day.today {
+border: 1.5px solid var(–gold);
+color: var(–gold);
+font-weight: 600;
+}
+.cal-day.has-entry {
+background: var(–deep);
+color: var(–warm);
+font-weight: 600;
+}
+.cal-day.has-entry.today {
+background: var(–gold);
+color: var(–deep);
+border: none;
+}
+.cal-day.selected-day {
+outline: 2px solid var(–red);
+outline-offset: 1px;
+}
+.cal-day.future { color: var(–border); cursor: default; }
+.cal-day.sunday-num { color: var(–red); }
+.cal-day.has-entry.sunday-num { color: var(–warm); }
+
+.cal-legend {
+display: flex;
+gap: 14px;
+padding: 8px 14px 12px;
+border-top: 1px solid var(–border);
+background: var(–white);
+}
+.cal-leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(–fade); font-family: ‘Crimson Pro’, serif; }
+.cal-leg-dot  { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+</style>
+</head>
+<body>
+
+<div id="pin-overlay" style="display:flex;position:fixed;inset:0;background:#1A1A2E;z-index:99999;flex-direction:column;align-items:center;justify-content:center;gap:20px;font-family:sans-serif;">
+  <div style="color:#C9A96E;font-size:13px;letter-spacing:3px;text-transform:uppercase;">Unesi PIN</div>
+  <div id="pin-dots" style="display:flex;gap:12px;margin:8px 0;">
+    <div id="d1" style="width:14px;height:14px;border-radius:50%;border:2px solid #C9A96E;"></div>
+    <div id="d2" style="width:14px;height:14px;border-radius:50%;border:2px solid #C9A96E;"></div>
+    <div id="d3" style="width:14px;height:14px;border-radius:50%;border:2px solid #C9A96E;"></div>
+    <div id="d4" style="width:14px;height:14px;border-radius:50%;border:2px solid #C9A96E;"></div>
+  </div>
+  <div id="pin-error" style="color:#FF5C5C;font-size:12px;height:16px;"></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:220px;">
+    <button onclick="pinPress('1')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">1</button>
+    <button onclick="pinPress('2')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">2</button>
+    <button onclick="pinPress('3')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">3</button>
+    <button onclick="pinPress('4')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">4</button>
+    <button onclick="pinPress('5')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">5</button>
+    <button onclick="pinPress('6')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">6</button>
+    <button onclick="pinPress('7')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">7</button>
+    <button onclick="pinPress('8')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">8</button>
+    <button onclick="pinPress('9')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">9</button>
+    <button onclick="pinDel()" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#FF5C5C;font-size:18px;border-radius:4px;cursor:pointer;">⌫</button>
+    <button onclick="pinPress('0')" style="height:60px;background:#16213E;border:1px solid #2A2E4A;color:#E8EDE8;font-size:22px;border-radius:4px;cursor:pointer;">0</button>
+    <div></div>
+  </div>
+</div>
+<script>
+var _pin = '';
+var _correct = '1312';
+if(sessionStorage.getItem('pin_ok')==='1'){
+  document.getElementById('pin-overlay').style.display='none';
+}
+function pinPress(d){
+  if(_pin.length>=4)return;
+  _pin+=d;
+  document.getElementById('d'+_pin.length).style.background='#C9A96E';
+  if(_pin.length===4){
+    if(_pin===_correct){
+      sessionStorage.setItem('pin_ok','1');
+      document.getElementById('pin-overlay').style.display='none';
+    } else {
+      document.getElementById('pin-error').textContent='Pogresan PIN';
+      setTimeout(function(){
+        _pin='';
+        for(var i=1;i<=4;i++)document.getElementById('d'+i).style.background='transparent';
+        document.getElementById('pin-error').textContent='';
+      },800);
+    }
+  }
+}
+function pinDel(){
+  if(!_pin.length)return;
+  document.getElementById('d'+_pin.length).style.background='transparent';
+  _pin=_pin.slice(0,-1);
+}
+<\/script>
+
+<header>
+  <div class="cross">† † †</div>
+  <h1>Moj Dnevnik</h1>
+  <div class="date-nav">
+    <button id="btn-prev">‹</button>
+    <div id="current-date-label" style="cursor:pointer" id="current-date-label">—</div>
+    <button class="btn-cal" id="btn-cal" title="Otvori kalendar">📅</button>
+    <button id="btn-next">›</button>
+  </div>
+</header>
+
+<div id="toast"></div>
+
+<main id="main-content">
+  <div id="today-indicator" style="display:none" class="today-saved">
+    ✦ Zapis za ovaj dan već postoji — možeš ga urediti i ponovo sačuvati
+  </div>
+
+  <!-- OSJEĆANJA -->
+
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">❤</span>
+      <h2>Kako sam se osjećao</h2>
+      <span class="hint">odaberi jedno ili više</span>
+    </div>
+    <div class="mood-row" id="mood-row">
+      <!-- generated -->
+    </div>
+    <textarea id="ta-feeling" class="feeling-ta" placeholder="Detaljnije o raspoloženju, emocijama, unutrašnjem stanju…" rows="3"></textarea>
+    <div class="char-count" id="cc-feeling">0</div>
+  </div>
+
+  <!-- ŠTA SAM RADIO -->
+
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">📋</span>
+      <h2>Šta sam radio</h2>
+      <span class="hint">aktivnosti, događaji</span>
+    </div>
+    <textarea id="ta-activities" placeholder="Šta sam radio danas? Posao, obaveze, susreti, trening, molitva…" rows="4"></textarea>
+    <div class="char-count" id="cc-activities">0</div>
+  </div>
+
+  <!-- O ČEMU SAM RAZMIŠLJAO -->
+
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">💭</span>
+      <h2>O čemu sam razmišljao</h2>
+      <span class="hint">misli, pitanja, uvidi</span>
+    </div>
+    <div class="tag-row" id="thought-tags">
+      <!-- generated -->
+    </div>
+    <textarea id="ta-thoughts" placeholder="Misli, dileme, uvidi, pitanja koja su me pratila tokom dana…" rows="4"></textarea>
+    <div class="char-count" id="cc-thoughts">0</div>
+  </div>
+
+  <div class="ornament">✦ ✦ ✦</div>
+
+  <!-- ŠTA SAM SANJAO -->
+
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">🌙</span>
+      <h2>Šta sam sanjao</h2>
+      <span class="hint">opciono — prethodne noći</span>
+    </div>
+    <textarea id="ta-dream" class="dream-ta" placeholder="Slike, osjećaji, likovi iz sna… ili 'Nisam pamtio san'." rows="3"></textarea>
+    <div class="char-count" id="cc-dream">0</div>
+  </div>
+
+  <!-- ZAHVALNOST -->
+
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">🙏</span>
+      <h2>Zahvalnost</h2>
+      <span class="hint">1–3 stvari</span>
+    </div>
+    <textarea id="ta-gratitude" placeholder="Za šta sam danas zahvalan Bogu i ljudima u svom životu?" rows="3"></textarea>
+    <div class="char-count" id="cc-gratitude">0</div>
+  </div>
+
+</main>
+
+<div class="save-wrap">
+  <button id="btn-save">† Sačuvaj zapis</button>
+  <button id="btn-view">Arhiva →</button>
+</div>
+
+<!-- ARCHIVE OVERLAY -->
+
+<div id="archive">
+  <header>
+    <div class="cross">† † †</div>
+    <h1>Arhiva Dnevnika</h1>
+    <button class="archive-close" id="btn-close-archive">✕</button>
+  </header>
+  <div class="archive-list" id="archive-list"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+const STORE_KEY = 'dnevnik_entries_v1';
+let currentDate = new Date();
+currentDate.setHours(0,0,0,0);
+
+const MOODS = [
+  'Smiren','Zahvalan','Radostan','Fokusiran','Umoran',
+  'Tjeskoban','Tužan','Razdražen','Nadahnut','Ravnodušan'
+];
+
+const THOUGHT_TAGS = [
+  'Vjera','Porodica','Posao','Zdravlje','Budućnost',
+  'Prošlost','Odnosi','Planovi','Smisao','Tijelo'
+];
+
+let selectedMoods = new Set();
+let selectedThoughtTags = new Set();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STORAGE
+// ─────────────────────────────────────────────────────────────────────────────
+function loadAll() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); }
+  catch(e) { return {}; }
+}
+
+function saveAll(data) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+}
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT UI
+// ─────────────────────────────────────────────────────────────────────────────
+function buildMoodButtons() {
+  const row = document.getElementById('mood-row');
+  MOODS.forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'mood-btn';
+    btn.textContent = m;
+    btn.dataset.mood = m;
+    btn.addEventListener('click', () => {
+      if (selectedMoods.has(m)) {
+        selectedMoods.delete(m);
+        btn.classList.remove('selected');
+      } else {
+        selectedMoods.add(m);
+        btn.classList.add('selected');
+      }
+    });
+    row.appendChild(btn);
+  });
+}
+
+function buildThoughtTags() {
+  const row = document.getElementById('thought-tags');
+  THOUGHT_TAGS.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'tag';
+    btn.textContent = t;
+    btn.dataset.tag = t;
+    btn.addEventListener('click', () => {
+      if (selectedThoughtTags.has(t)) {
+        selectedThoughtTags.delete(t);
+        btn.classList.remove('selected');
+      } else {
+        selectedThoughtTags.add(t);
+        btn.classList.add('selected');
+      }
+    });
+    row.appendChild(btn);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATE NAV
+// ─────────────────────────────────────────────────────────────────────────────
+const SR_DAYS   = ['Nedjelja','Ponedjeljak','Utorak','Srijeda','Četvrtak','Petak','Subota'];
+const SR_MONTHS = ['januara','februara','marta','aprila','maja','juna',
+                   'jula','avgusta','septembra','oktobra','novembra','decembra'];
+
+function formatDateLabel(d) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = Math.round((d - today) / 86400000);
+  let rel = '';
+  if (diff === 0) rel = 'Danas';
+  else if (diff === -1) rel = 'Juče';
+  else if (diff === 1) rel = 'Sutra';
+  const dow = SR_DAYS[d.getDay()];
+  const label = `${dow}, ${d.getDate()}. ${SR_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  return rel ? `${rel} — ${label}` : label;
+}
+
+function updateDateLabel() {
+  document.getElementById('current-date-label').textContent = formatDateLabel(currentDate);
+}
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+  currentDate = new Date(currentDate.getTime() - 86400000);
+  loadEntryForDate();
+});
+
+document.getElementById('btn-next').addEventListener('click', () => {
+  const tomorrow = new Date(); tomorrow.setHours(0,0,0,0); tomorrow.setDate(tomorrow.getDate()+1);
+  if (currentDate < tomorrow) {
+    currentDate = new Date(currentDate.getTime() + 86400000);
+    loadEntryForDate();
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LOAD / CLEAR FORM
+// ─────────────────────────────────────────────────────────────────────────────
+function clearForm() {
+  ['ta-feeling','ta-activities','ta-thoughts','ta-dream','ta-gratitude'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  selectedMoods.clear();
+  selectedThoughtTags.clear();
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.tag').forEach(b => b.classList.remove('selected'));
+  updateChars();
+}
+
+function loadEntryForDate() {
+  clearForm();
+  updateDateLabel();
+  const all = loadAll();
+  const key = dateKey(currentDate);
+  const indicator = document.getElementById('today-indicator');
+  if (all[key]) {
+    const e = all[key];
+    document.getElementById('ta-feeling').value    = e.feeling    || '';
+    document.getElementById('ta-activities').value = e.activities || '';
+    document.getElementById('ta-thoughts').value   = e.thoughts   || '';
+    document.getElementById('ta-dream').value      = e.dream      || '';
+    document.getElementById('ta-gratitude').value  = e.gratitude  || '';
+    (e.moods || []).forEach(m => {
+      selectedMoods.add(m);
+      document.querySelectorAll('.mood-btn').forEach(b => {
+        if (b.dataset.mood === m) b.classList.add('selected');
+      });
+    });
+    (e.thoughtTags || []).forEach(t => {
+      selectedThoughtTags.add(t);
+      document.querySelectorAll('.tag').forEach(b => {
+        if (b.dataset.tag === t) b.classList.add('selected');
+      });
+    });
+    indicator.style.display = 'block';
+    updateChars();
+  } else {
+    indicator.style.display = 'none';
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHAR COUNTERS
+// ─────────────────────────────────────────────────────────────────────────────
+function updateChars() {
+  [['ta-feeling','cc-feeling'],['ta-activities','cc-activities'],
+   ['ta-thoughts','cc-thoughts'],['ta-dream','cc-dream'],
+   ['ta-gratitude','cc-gratitude']].forEach(([tid,cid]) => {
+    const len = document.getElementById(tid).value.length;
+    document.getElementById(cid).textContent = len > 0 ? `${len} znakova` : '';
+  });
+}
+
+['ta-feeling','ta-activities','ta-thoughts','ta-dream','ta-gratitude'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateChars);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SAVE
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById('btn-save').addEventListener('click', () => {
+  const feeling    = document.getElementById('ta-feeling').value.trim();
+  const activities = document.getElementById('ta-activities').value.trim();
+  const thoughts   = document.getElementById('ta-thoughts').value.trim();
+  const dream      = document.getElementById('ta-dream').value.trim();
+  const gratitude  = document.getElementById('ta-gratitude').value.trim();
+
+  if (!feeling && !activities && !thoughts && !dream && !gratitude && selectedMoods.size === 0) {
+    showToast('Unesi barem nešto prije nego što sačuvaš ✦');
+    return;
+  }
+
+  const all = loadAll();
+  const key = dateKey(currentDate);
+  all[key] = {
+    date: key,
+    feeling, activities, thoughts, dream, gratitude,
+    moods: [...selectedMoods],
+    thoughtTags: [...selectedThoughtTags],
+    savedAt: new Date().toISOString()
+  };
+  saveAll(all);
+  document.getElementById('today-indicator').style.display = 'block';
+  showToast('Zapis sačuvan † ' + formatShortDate(currentDate));
+});
+
+function formatShortDate(d) {
+  return `${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ARCHIVE
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById('btn-view').addEventListener('click', openArchive);
+document.getElementById('btn-close-archive').addEventListener('click', () => {
+  document.getElementById('archive').style.display = 'none';
+});
+
+function openArchive() {
+  const all = loadAll();
+  const list = document.getElementById('archive-list');
+  list.innerHTML = '';
+
+  const keys = Object.keys(all).sort((a,b) => b.localeCompare(a));
+  if (keys.length === 0) {
+    list.innerHTML = '<div class="empty-archive">Još nema zabiljeških.<br>Tvoj dnevnik čeka prvi zapis.</div>';
+  } else {
+    keys.forEach(key => {
+      const e = all[key];
+      const d = new Date(key + 'T00:00:00');
+      const el = document.createElement('div');
+      el.className = 'archive-entry';
+
+      const moodText = (e.moods||[]).join(', ') || '';
+      const tagText  = (e.thoughtTags||[]);
+
+      let bodyHTML = '';
+      if (e.feeling)    bodyHTML += section('Kako sam se osjećao', e.feeling);
+      if (e.activities) bodyHTML += section('Šta sam radio', e.activities);
+      if (e.thoughts)   bodyHTML += section('O čemu sam razmišljao', e.thoughts);
+      if (e.dream)      bodyHTML += section('San', e.dream);
+      if (e.gratitude)  bodyHTML += section('Zahvalnost', e.gratitude);
+      if (tagText.length) bodyHTML += `<div class="entry-tags">${tagText.map(t=>`<span class="entry-tag">${t}</span>`).join('')}</div>`;
+
+      el.innerHTML = `
+        <div class="entry-date">
+          <span>${SR_DAYS[d.getDay()]}, ${d.getDate()}. ${SR_MONTHS[d.getMonth()]} ${d.getFullYear()}</span>
+          <span class="entry-mood-badge">${moodText}</span>
+          <button class="del-btn" data-key="${key}">🗑</button>
+        </div>
+        <div class="entry-body">${bodyHTML || '<em style="color:#999;font-size:13px">Prazan zapis</em>'}</div>
+      `;
+      list.appendChild(el);
+    });
+
+    list.querySelectorAll('.del-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Obrisati ovaj zapis?')) return;
+        const all2 = loadAll();
+        delete all2[btn.dataset.key];
+        saveAll(all2);
+        openArchive();
+        loadEntryForDate();
+      });
+    });
+  }
+
+  document.getElementById('archive').style.display = 'block';
+  document.getElementById('archive').scrollTop = 0;
+}
+
+function section(label, text) {
+  return `<div class="entry-section">
+    <div class="entry-section-label">${label}</div>
+    <div class="entry-section-text">${escHtml(text)}</div>
+  </div>`;
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────────────────────────────────────
+buildMoodButtons();
+buildThoughtTags();
+loadEntryForDate();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CALENDAR
+// ─────────────────────────────────────────────────────────────────────────────
+const SR_MONTHS_FULL = ['Januar','Februar','Mart','April','Maj','Jun',
+                        'Jul','Avgust','Septembar','Oktobar','Novembar','Decembar'];
+
+let calYear  = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+function openCalendar() {
+  // Sync to currently viewed date
+  calYear  = currentDate.getFullYear();
+  calMonth = currentDate.getMonth();
+  renderCalendar();
+  document.getElementById('cal-overlay').classList.add('open');
+}
+
+function renderCalendar() {
+  document.getElementById('cal-month-title').textContent =
+    SR_MONTHS_FULL[calMonth] + ' ' + calYear;
+
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  const all      = loadAll();
+  const today    = new Date(); today.setHours(0,0,0,0);
+  const firstDay = new Date(calYear, calMonth, 1);
+  // Week starts Monday: Mon=0 … Sun=6
+  let startOffset = firstDay.getDay() - 1;
+  if (startOffset < 0) startOffset = 6;
+
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+  // Empty cells before first day
+  for (let i = 0; i < startOffset; i++) {
+    const el = document.createElement('div');
+    el.className = 'cal-day empty';
+    grid.appendChild(el);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date    = new Date(calYear, calMonth, d);
+    const key     = dateKey(date);
+    const isFuture   = date > today;
+    const isToday    = date.getTime() === today.getTime();
+    const hasEntry   = !!all[key];
+    const isSelected = date.getTime() === currentDate.getTime();
+    const isSunday   = date.getDay() === 0;
+
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    if (isFuture)   el.classList.add('future');
+    if (isToday)    el.classList.add('today');
+    if (hasEntry)   el.classList.add('has-entry');
+    if (isSelected) el.classList.add('selected-day');
+    if (isSunday)   el.classList.add('sunday-num');
+
+    el.textContent = d;
+
+    if (!isFuture) {
+      el.addEventListener('click', () => {
+        currentDate = new Date(calYear, calMonth, d);
+        currentDate.setHours(0,0,0,0);
+        document.getElementById('cal-overlay').classList.remove('open');
+        loadEntryForDate();
+        // Scroll to top
+        window.scrollTo(0, 0);
+      });
+    }
+
+    grid.appendChild(el);
+  }
+}
+
+document.getElementById('btn-cal').addEventListener('click', openCalendar);
+
+document.getElementById('cal-close').addEventListener('click', () => {
+  document.getElementById('cal-overlay').classList.remove('open');
+});
+
+// Close on backdrop tap
+document.getElementById('cal-overlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('cal-overlay')) {
+    document.getElementById('cal-overlay').classList.remove('open');
+  }
+});
+
+document.getElementById('cal-prev').addEventListener('click', () => {
+  if (calMonth === 0) { calMonth = 11; calYear--; } else { calMonth--; }
+  renderCalendar();
+});
+
+document.getElementById('cal-next').addEventListener('click', () => {
+  const now = new Date();
+  if (calYear < now.getFullYear() || (calYear === now.getFullYear() && calMonth < now.getMonth())) {
+    if (calMonth === 11) { calMonth = 0; calYear++; } else { calMonth++; }
+    renderCalendar();
+  }
+});
+
+</script>
+
+<!-- CALENDAR OVERLAY -->
+
+<div id="cal-overlay">
+  <div class="cal-sheet">
+    <div class="cal-header">
+      <button class="cal-nav-btn" id="cal-prev">‹</button>
+      <div class="cal-month-title" id="cal-month-title">—</div>
+      <button class="cal-nav-btn" id="cal-next">›</button>
+      <button class="cal-close" id="cal-close">✕</button>
+    </div>
+    <div class="cal-weekdays">
+      <div class="cal-wd">Pon</div>
+      <div class="cal-wd">Uto</div>
+      <div class="cal-wd">Sri</div>
+      <div class="cal-wd">Čet</div>
+      <div class="cal-wd">Pet</div>
+      <div class="cal-wd">Sub</div>
+      <div class="cal-wd sunday">Ned</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-legend">
+      <div class="cal-leg-item"><div class="cal-leg-dot" style="background:var(--deep)"></div> Ima zapis</div>
+      <div class="cal-leg-item"><div class="cal-leg-dot" style="background:var(--gold)"></div> Danas</div>
+      <div class="cal-leg-item"><div class="cal-leg-dot" style="border:1.5px solid var(--gold);background:transparent"></div> Odabrani dan</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
